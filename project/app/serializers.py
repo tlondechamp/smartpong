@@ -3,19 +3,13 @@ import json
 from rest_framework import serializers
 from rest_framework.relations import PrimaryKeyRelatedField
 
-from project.app.models import Game, Player, Round, Season
+from project.app.models import Game, Player, Season
 
 
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
         fields = '__all__'
-
-
-class RoundSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Round
-        fields = ('result', 'player1', 'player2')
 
 
 class SeasonSerializer(serializers.ModelSerializer):
@@ -36,7 +30,6 @@ class GameSerializer(serializers.ModelSerializer):
     player2 = PrimaryKeyRelatedField(queryset=Player.objects.all())
     player1_details = PlayerSerializer(source='player1', read_only=True)
     player2_details = PlayerSerializer(source='player2', read_only=True)
-    rounds = RoundSerializer(many=True, read_only=True)
 
     class Meta:
         model = Game

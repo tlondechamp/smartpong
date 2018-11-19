@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-import uuid
-
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils import timezone
@@ -10,12 +8,16 @@ from project.app.elo import Elo
 
 
 class GameResult(object):
-    Player1 = 0
-    Player2 = 1
+    Result_20 = 0
+    Result_21 = 1
+    Result_12 = 2
+    Result_02 = 3
 
     choices = (
-        (Player1, 'Player1'),
-        (Player2, 'Player2'),
+        (Result_20, '2-0'),
+        (Result_21, '2-1'),
+        (Result_02, '0-2'),
+        (Result_12, '1-2'),
     )
 
 
@@ -30,9 +32,9 @@ class GamePhase(object):
 
 
 class Player(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField(max_length=255, db_index=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, db_index=True)
+    email = models.EmailField(max_length=255, db_index=True)
 
     def __str__(self):
         return self.name
@@ -81,10 +83,6 @@ class Game(models.Model):
     player2_rating_change = models.IntegerField(null=True, blank=True)
     date = models.DateTimeField(db_index=True)
 
-    @property
-    def rounds(self):
-        return self.round_set.order_by('order')
-
     def update_player_ratings(self):
         if self.season and self.phase == GamePhase.Ranked:
             p1_score, p2_score = self._get_player_scores()
@@ -114,9 +112,13 @@ class Game(models.Model):
         return new_rating - old_rating
 
     def _get_player_scores(self):
-        if self.result == GameResult.Player1:
+        if self.result == GameResult.Result_20:
             return (1, 0)
-        if self.result == GameResult.Player2:
+        if self.result == GameResult.Result_21:
+            return (0.67, 0.33)
+        if self.result == GameResult.Result_12:
+            return (0.33, 0.67)
+        if self.result == GameResult.Result_02:
             return (0, 1)
         raise RuntimeError('Invalid result value: %s' % self.result)
 
@@ -125,23 +127,3 @@ def game_post_save(sender, instance, created, **kwargs):
     if created:
         instance.update_player_ratings()
 post_save.connect(game_post_save, Game)
-
-
-class RoundResult(object):
-    Loss = 1
-    Victory = 2
-
-    choices = (
-        (Loss, ''),
-        (Victory, 'V'),
-    )
-
-    choices_dict = dict(choices)
-
-
-class Round(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    order = models.IntegerField()
-    result = models.IntegerField(choices=GameResult.choices)
-    player1 = models.IntegerField(choices=RoundResult.choices)
-    player2 = models.IntegerField(choices=RoundResult.choices)

@@ -12,11 +12,11 @@ def win_percentage(player):
     win_total = 0
     for game in player.games_as_first_player.all():
         match_total += 1
-        if game.result == GameResult.Player1:
+        if game.result in [GameResult.Result_20, GameResult.Result_21]:
             win_total += 1
     for game in player.games_as_second_player.all():
         match_total += 1
-        if game.result == GameResult.Player2:
+        if game.result in [GameResult.Result_02, GameResult.Result_12]:
             win_total += 1
 
     if match_total == 0:
