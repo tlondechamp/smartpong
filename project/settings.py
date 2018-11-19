@@ -25,7 +25,9 @@ SECRET_KEY = '20-3d0lt97kv*0&1@il8m%*j6%l%+d-*4dmueb5+x*j6y_%wk3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'tlondechamp.pythonanywhere.com']
+
+SITE_ID = 1
 
 
 # Application definition
@@ -35,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
@@ -107,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Paris'
 
 USE_I18N = True
 

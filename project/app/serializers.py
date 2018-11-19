@@ -9,12 +9,14 @@ from project.app.models import Game, Player, Round, Season
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
+        fields = '__all__'
 
 
 class RoundSerializer(serializers.ModelSerializer):
     class Meta:
         model = Round
         fields = ('result', 'player1', 'player2')
+
 
 class SeasonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,4 +40,5 @@ class GameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Game
+        fields = '__all__'
         read_only_fields = ('season', 'phase', 'player1_rating_change', 'player2_rating_change')

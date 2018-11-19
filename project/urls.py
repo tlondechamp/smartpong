@@ -1,8 +1,13 @@
-from django.urls import include, re_path
+from django.conf.urls import url
+from django.contrib import admin
+from rest_framework.routers import DefaultRouter
 
 from project.app import views
 
-urlpatterns = [
-    re_path(r'^matches/', views.MatchViewSet.as_view({'get': 'list'}), name='matches'),
-    re_path(r'^players/', views.PlayerViewSet.as_view({'get': 'list'}), name='players'),
+router = DefaultRouter()
+router.register(r'players', views.PlayerViewSet, basename='player')
+router.register(r'games', views.GameViewSet, basename='games')
+
+urlpatterns = router.urls + [
+	url(r'^admin/', admin.site.urls),
 ]
