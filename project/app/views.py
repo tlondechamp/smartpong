@@ -17,7 +17,7 @@ class CreateListRetrieveViewSet(mixins.CreateModelMixin,
 
 
 class GameViewSet(CreateListRetrieveViewSet):
-    queryset = Game.objects.all().order_by('-created_at')
+    queryset = Game.objects.all()
     serializer_class = GameSerializer
 
     def perform_create(self, serializer):

@@ -34,7 +34,7 @@ class Player(models.Model):
     email = models.EmailField(max_length=255, db_index=True)
     name = models.CharField(max_length=255, db_index=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -46,7 +46,7 @@ class Season(models.Model):
     placement_games = models.IntegerField(default=5)
     playoff_data = models.TextField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     @classmethod
