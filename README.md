@@ -1,3 +1,3 @@
 # SmartPong
 
-Rank your table tennis matches right now !
+Rank your table tennis games right now !
