@@ -46,7 +46,6 @@ class SeasonSerializer(serializers.ModelSerializer):
 
             total = 0
             wins = 0
-            draws = 0
             losses = 0
             for game in results.player.games_as_player1.all():
                 total += 1
@@ -65,7 +64,6 @@ class SeasonSerializer(serializers.ModelSerializer):
                 'rating': results.elo_rating,
                 'games': total,
                 'wins': wins,
-                'draws': draws,
                 'losses': losses,
                 'win_percentage': round(100 * wins / float(total), 1)
             }
