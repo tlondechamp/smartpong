@@ -1,5 +1,48 @@
-<div class="row mt-5">
-  <div class="col text-center my-3">
-    <img id="logo" class="img-fluid mx-auto d-block my-3" [src]="logo">
+<div class="container">
+  <div class="header clearfix">
+    <h1 class="mt-3 text-muted">{{ season.name }}</h1>
+    <h4 *ngIf="season.id && !isSeasonFinished(season)">Qualifications from {{ season.start_date|date }} to {{ season.end_date|date }}</h4>
+  </div>
+  <div class="row">
+    <div class="col-md-5">
+      <h4>Ranking</h4>
+      <table class="table table-condensed">
+        <tr>
+          <th class="col-md-1">Rank</th>
+          <th>Name</th>
+          <th class="col-md-1 text-center">Score</th>
+          <th class="col-md-3 text-center">Win rate</th>
+        </tr>
+        <ng-container *ngIf="!loading.ranking && !error.ranking">
+          <tr *ngFor="let player of ranking; index as index" [ngClass]="{'bg-info': index < 8}">
+            <td>{{ player.rank }}</td>
+            <td><a [routerLink]="['/players', player.name]" [queryParams]="{season: season.id}">{{ player.name }}</a></td>
+            <td class="text-center">{{ player.rating }}</td>
+            <td class="text-center">{{ player.wins / player.games | percent:'1.0-0' }}</td>
+          </tr>
+        </ng-container>
+      </table>
+      <ng-container *ngIf="!loading.ranking && !error.ranking && season.placement_games > 0">
+        <h4>Unranked ({{ season.placement_games }} games need to be played)</h4>
+        <table class="table table-condensed">
+          <tr>
+            <th>Name</th>
+            <th class="col-md-1 text-center">Played</th>
+            <th class="col-md-1 text-center">Score</th>
+            <th class="col-md-3 text-center">Win rate</th>
+          </tr>
+          <tr *ngFor="let player of placement">
+            <td>{{ player.name }}</td>
+            <td class="text-center">{{ player.games }}</td>
+            <td class="text-center">{{ player.rating }}</td>
+            <td class="text-center">{{ player.win_percentage }}</td>
+          </tr>
+        </table>
+      </ng-container>
+    </div>
+    <div class="col-md-6 col-md-offset-1">
+      <h4>Last Games</h4>
+      <p>Last Games</p>
+    </div>
   </div>
 </div>

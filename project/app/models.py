@@ -81,7 +81,7 @@ class Game(models.Model):
     result = models.IntegerField(choices=GameResult.choices)
     player1_rating_change = models.IntegerField(null=True, blank=True)
     player2_rating_change = models.IntegerField(null=True, blank=True)
-    date = models.DateTimeField(db_index=True)
+    date = models.DateTimeField(auto_now_add=True, db_index=True)
 
     def update_player_ratings(self):
         if self.season and self.phase == GamePhase.Ranked:

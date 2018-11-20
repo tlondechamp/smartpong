@@ -8,7 +8,7 @@ class Elo(object):
     @classmethod
     def get_new_rating(cls, score, rating, opponent_rating):
         prob = cls.get_win_probability(rating, opponent_rating)
-        return int(round(rating + K * (score - prob)))
+        return int(round(rating + cls.K * (score - prob)))
 
     @classmethod
     def get_win_probability(cls, rating, opponent_rating):
