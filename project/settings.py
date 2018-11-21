@@ -25,7 +25,7 @@ SECRET_KEY = '20-3d0lt97kv*0&1@il8m%*j6%l%+d-*4dmueb5+x*j6y_%wk3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'tlondechamp.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'tlondechamp.pythonanywhere.com']
 
 SITE_ID = 1
 

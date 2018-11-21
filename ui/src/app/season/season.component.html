@@ -1,46 +1,62 @@
 <div class="container">
-  <div class="header clearfix">
-    <h1 class="mt-3 text-muted">{{ season.name }}</h1>
-    <h4 *ngIf="season.id && !isSeasonFinished(season)">Qualifications from {{ season.start_date|date }} to {{ season.end_date|date }}</h4>
+  <div class="row">
+    <div class="col mb-3">
+      <h1 class="col-3 text-muted">{{ season?.name }}</h1>
+      <h4 class="col-9 text-right">Qualifications from {{ season?.start_date|date }} to {{ season?.end_date|date }}</h4>
+    </div>
   </div>
   <div class="row">
-    <div class="col-md-5">
+    <div class="col-6">
       <h4>Ranking</h4>
-      <table class="table table-condensed">
-        <tr>
-          <th class="col-md-1">Rank</th>
-          <th>Name</th>
-          <th class="col-md-1 text-center">Score</th>
-          <th class="col-md-3 text-center">Win rate</th>
-        </tr>
-        <ng-container *ngIf="!loading.ranking && !error.ranking">
-          <tr *ngFor="let player of ranking; index as index" [ngClass]="{'bg-info': index < 8}">
-            <td>{{ player.rank }}</td>
-            <td><a [routerLink]="['/players', player.name]" [queryParams]="{season: season.id}">{{ player.name }}</a></td>
-            <td class="text-center">{{ player.rating }}</td>
-            <td class="text-center">{{ player.wins / player.games | percent:'1.0-0' }}</td>
+      <div *ngIf="season?.ranking.ranking.length == 0" class="mb-3">
+        <h5 class="col">
+          There is no ranked players for this season.
+        </h5>
+      </div>
+      <table *ngIf="season?.ranking.ranking.length > 0" class="table table-hover mb-3">
+        <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th class="text-right">Score</th>
+              <th class="text-right">Win Rate (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let player of season?.ranking.ranking">
+            <td>{{ player?.rank }}</td>
+            <td>{{ player?.name }}</td>
+            <td class="text-right">{{ player?.rating }}</td>
+            <td class="text-right">{{ player?.win_percentage }}</td>
           </tr>
-        </ng-container>
+        </tbody>
       </table>
-      <ng-container *ngIf="!loading.ranking && !error.ranking && season.placement_games > 0">
-        <h4>Unranked ({{ season.placement_games }} games need to be played)</h4>
-        <table class="table table-condensed">
+      <h4>Unranked ({{ season?.placement_games }} games need to be played)</h4>
+      <div *ngIf="season?.ranking.placement.length == 0" class="mb-3">
+        <h5 class="col mt-3">
+          There is no unranked players for this season.
+        </h5>
+      </div>
+      <table *ngIf="season?.ranking.placement.length > 0" class="table table-hover mb-3">
+        <thead>
           <tr>
             <th>Name</th>
-            <th class="col-md-1 text-center">Played</th>
-            <th class="col-md-1 text-center">Score</th>
-            <th class="col-md-3 text-center">Win rate</th>
+            <th class="text-right">Played</th>
+            <th class="text-right">Score</th>
+            <th class="text-right">Win Rate (%)</th>
           </tr>
-          <tr *ngFor="let player of placement">
-            <td>{{ player.name }}</td>
-            <td class="text-center">{{ player.games }}</td>
-            <td class="text-center">{{ player.rating }}</td>
-            <td class="text-center">{{ player.win_percentage }}</td>
+        </thead>
+        <tbody>
+          <tr *ngFor="let player of season?.ranking.placement">
+            <td>{{ player?.name }}</td>
+            <td class="text-right">{{ player?.games }}</td>
+            <td class="text-right">{{ player?.rating }}</td>
+            <td class="text-right">{{ player?.win_percentage }}</td>
           </tr>
-        </table>
-      </ng-container>
+        </tbody>
+      </table>
     </div>
-    <div class="col-md-6 col-md-offset-1">
+    <div class="col-6">
       <h4>Last Games</h4>
       <p>Last Games</p>
     </div>

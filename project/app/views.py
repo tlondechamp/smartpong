@@ -22,7 +22,7 @@ class SeasonViewSet(ReadOnlyModelViewSet):
 
 
 class GameViewSet(CreateListRetrieveViewSet):
-    queryset = Game.objects.all()
+    queryset = Game.objects.all().order_by('-date')
     serializer_class = GameSerializer
 
     def perform_create(self, serializer):

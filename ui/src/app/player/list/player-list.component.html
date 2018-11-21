@@ -1,22 +1,22 @@
 <div class="container">
   <div class="header clearfix">
-    <h1 class="text-muted">Seasons</h1>
+    <h1 class="text-muted">Players ({{ players.length }})</h1>
   </div>
   <div class="row">
     <div class="table-responsive">
       <table class="table table-hover">
         <thead>
           <tr>
+            <th>#</th>
             <th>Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
+            <th>Email</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let season of seasons" [routerLink]="['/seasons', season.id]">
-            <td>{{ season.name }}</td>
-            <td>{{ season.start_date | date }}</td>
-            <td>{{ season.end_date | date }}</td>
+          <tr *ngFor="let player of players">
+            <td>{{ player?.id }}</td>
+            <td>{{ player?.name }}</td>
+            <td>{{ player?.email }}</td>
           </tr>
         </tbody>
       </table>

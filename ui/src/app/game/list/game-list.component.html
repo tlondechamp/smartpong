@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="header clearfix">
+    <h1 class="text-muted">Games ({{ games.length }})</h1>
+  </div>
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player 1</th>
+            <th>Player 2</th>
+            <th>Result</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let game of games">
+            <td>{{ game?.id }}</td>
+            <td>{{ game?.player1_details.name }} ({{ game?.player1_rating_change }})</td>
+            <td>{{ game?.player2_details.name }} ({{ game?.player2_rating_change }})</td>
+            <td>{{ gameResultLabels[game?.result] }}</td>
+            <td>{{ game?.date | date: DateFormat }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
