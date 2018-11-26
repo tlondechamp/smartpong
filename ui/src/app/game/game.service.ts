@@ -13,6 +13,10 @@ export class GameService {
 
   constructor(protected _http: HttpClient) {}
 
+  create(game: Game): Observable<Game> {
+    return this._http.post<Game>(this.url, game, { responseType: 'json' });
+  }
+
   retrieve(id: number): Observable<Game> {
     return this._http.get<Game>(`${this.url}${id}/`, { responseType: 'json' });
   }

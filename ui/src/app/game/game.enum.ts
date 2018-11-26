@@ -1,8 +1,8 @@
 export const enum GameResult {
-  Player1_20,
-  Player1_21,
-  Player2_12,
-  Player2_02,
+  Player1_20 = 0,
+  Player1_21 = 1,
+  Player2_12 = 2,
+  Player2_02 = 3,
 }
 
 export const GameResultLabels = {

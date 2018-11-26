@@ -17,6 +17,17 @@ export class PlayerService {
     return this._http.get<Player>(`${this.url}${id}/`, { responseType: 'json' });
   }
 
+  search(search: string): Observable<Player[]> {
+    const searchKey = 'name';
+    return this._http.get<Player[]>(
+      this.url,
+      {
+        params: new HttpParams().set(searchKey, search),
+        responseType: 'json',
+      }
+    );
+  }
+
   list(filters?: Object): Observable<Player[]> {
     _.forEach(
       filters,
