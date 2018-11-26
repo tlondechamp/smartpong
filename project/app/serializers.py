@@ -47,25 +47,31 @@ class SeasonSerializer(serializers.ModelSerializer):
             total = 0
             wins = 0
             losses = 0
+            form = []
             for game in results.player.games_as_player1.all():
                 total += 1
                 if game.result in [GameResult.Result_20, GameResult.Result_21]:
                     wins += 1
+                    form.append('W')
                 else:
                     losses += 1
+                    form.append('L')
             for game in results.player.games_as_player2.all():
                 total += 1
                 if game.result in [GameResult.Result_02, GameResult.Result_12]:
                     wins += 1
+                    form.append('W')
                 else:
                     losses += 1
+                    form.append('L')
             data = {
                 'name': results.player.name,
                 'rating': results.elo_rating,
                 'games': total,
                 'wins': wins,
                 'losses': losses,
-                'win_percentage': round(100 * wins / float(total), 1)
+                'win_percentage': round(100 * wins / float(total), 1),
+                'form': form[-5:],
             }
             if total >= season.placement_games:
                 next_rank += 1

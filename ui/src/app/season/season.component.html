@@ -1,13 +1,16 @@
-<div class="container">
-  <div class="row">
-    <div class="col mb-3">
-      <h1 class="col-3 text-muted">{{ season?.name }}</h1>
-      <h4 class="col-9 text-right">Qualifications from {{ season?.start_date|date }} to {{ season?.end_date|date }}</h4>
-    </div>
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1><i class="fas fa-globe-americas mr-2"></i>{{ season?.name }}</h1>
+    <p>
+      Qualifications from <b>{{ season?.start_date|date }}</b> to <b>{{ season?.end_date|date }}</b>.
+      Each player must play <b>{{ season?.placement_games }} games</b> before entering the ranking.
+    </p>
   </div>
+</div>
+<div class="container-fluid">
   <div class="row">
     <div class="col-6">
-      <h4>Ranking</h4>
+      <h4><i class="fas fa-list-ol mr-2"></i>Ranking</h4>
       <div *ngIf="season?.ranking.ranking.length == 0" class="mb-3">
         <h5 class="col">
           There is no ranked players for this season.
@@ -19,7 +22,8 @@
               <th>Rank</th>
               <th>Name</th>
               <th class="text-right">Score</th>
-              <th class="text-right">Win Rate (%)</th>
+              <th class="text-right">Win Rate</th>
+              <th class="text-right">Form</th>
             </tr>
         </thead>
         <tbody>
@@ -27,11 +31,19 @@
             <td>{{ player?.rank }}</td>
             <td>{{ player?.name }}</td>
             <td class="text-right">{{ player?.rating }}</td>
-            <td class="text-right">{{ player?.win_percentage }}</td>
+            <td class="text-right">{{ player?.win_percentage }}%</td>
+            <td class="text-right">
+              <span *ngFor="let form of player?.form"
+                    class="badge ml-1"
+                    [ngClass]="{'badge-success': form == 'W',
+                                'badge-danger': form == 'L'}">
+                {{ form }}
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
-      <h4>Unranked ({{ season?.placement_games }} games need to be played)</h4>
+      <h4><i class="fas fa-layer-group mr-2"></i>Players to be ranked</h4>
       <div *ngIf="season?.ranking.placement.length == 0" class="mb-3">
         <h5 class="col mt-3">
           There is no unranked players for this season.
@@ -43,22 +55,79 @@
             <th>Name</th>
             <th class="text-right">Played</th>
             <th class="text-right">Score</th>
-            <th class="text-right">Win Rate (%)</th>
+            <th class="text-right">Win Rate</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let player of season?.ranking.placement">
             <td>{{ player?.name }}</td>
-            <td class="text-right">{{ player?.games }}</td>
+            <td class="text-right">{{ player?.games }} / {{ season?.placement_games }}</td>
             <td class="text-right">{{ player?.rating }}</td>
-            <td class="text-right">{{ player?.win_percentage }}</td>
+            <td class="text-right">{{ player?.win_percentage }}%</td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="col-6">
-      <h4>Last Games</h4>
-      <p>Last Games</p>
+      <h4>
+        <i class="fas fa-table-tennis mr-2"></i>Last Games
+        <button type="button"
+                class="btn btn-primary btn-sm float-right"
+                data-toggle="modal"
+                data-target="#addGameModal">
+          <i class="fas fa-plus mr-2"></i>Add Game
+        </button>
+      </h4>
+      <!-- Add Game Modal -->
+      <div class="modal fade" id="addGameModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Modal Heading</h4>
+            </div>
+            <div class="modal-body">
+              Modal body..
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <table *ngIf="last_games.length > 0" class="table table-hover mb-3">
+        <thead>
+          <tr>
+            <th>Player 1</th>
+            <th>Player 2</th>
+            <th>Result</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let game of last_games">
+            <td>
+              {{ game?.player1_details.name }}
+              <span class="badge ml-1"
+                    [ngClass]="{'badge-success': game.player1_rating_change > 0,
+                                'badge-secondary': game.player1_rating_change == 0,
+                                'badge-danger': game.player1_rating_change < 0}">
+                {{ game?.player1_rating_change }}
+              </span>
+            </td>
+            <td>
+              {{ game?.player2_details.name }}
+              <span class="badge ml-1"
+                    [ngClass]="{'badge-success': game.player2_rating_change > 0,
+                                'badge-secondary': game.player2_rating_change == 0,
+                                'badge-danger': game.player2_rating_change < 0}">
+                {{ game?.player2_rating_change }}
+              </span>
+            </td>
+            <td>{{ gameResultLabels[game?.result] }}</td>
+            <td>{{ game?.date | date: DateFormat }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
