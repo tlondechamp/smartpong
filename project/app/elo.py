@@ -3,7 +3,7 @@ from __future__ import division
 
 class Elo(object):
     R = 400
-    K = 20
+    K = 40
 
     @classmethod
     def get_new_rating(cls, score, rating, opponent_rating):

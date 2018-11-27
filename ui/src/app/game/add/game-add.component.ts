@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
 import { Observable, of, Subject } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
@@ -15,6 +16,8 @@ import { GameResultLabels } from '../game.enum';
   templateUrl: 'game-add.component.html',
 })
 export class GameAddComponent implements OnInit {
+  player1: Player;
+  player2: Player;
   players: Player[] = [];
   players_as_p1: Observable<Player>;
   players_as_p2: Observable<Player>;
@@ -43,8 +46,20 @@ export class GameAddComponent implements OnInit {
                                    .pipe(mergeMap((search: string) => this.getPlayers(search)));
   }
 
+  onSelectP1(event: TypeaheadMatch): void {
+    this.player1 = event.item;
+  }
+
+  onSelectP2(event: TypeaheadMatch): void {
+    this.player2 = event.item;
+  }
+
   confirmGame(): void {
-    this.gameCreated.next(this.gameForm.value as Game);
+    this.gameCreated.next({
+      player1: this.player1.id,
+      player2: this.player2.id,
+      result: this.gameForm.value.result,
+    } as Game);
     this.modalRef.hide();
   }
 

@@ -1,39 +1,46 @@
 <form [formGroup]="gameForm">
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Game Result</h4>
+    <h4 class="modal-title pull-left"><i class="fas fa-poll-h mr-2"></i>Game Result</h4>
   </div>
   <div class="modal-body">
-    <div class="form-group">
-      <input [typeahead]="players_as_p1"
-             [typeaheadItemTemplate]="player1Item"
-             typeaheadMinLength="2"
-             typeaheadOptionField="name"
-             formControlName="player1"
-             placeholder="Enter Player 1"
-             class="form-control">
-      <ng-template #player1Item let-player="item" class="btn-block">
-        <span>{{ player.name }}</span>
-      </ng-template>
-    </div>
-    <div class="form-group">
-      <input [typeahead]="players_as_p2"
-             [typeaheadItemTemplate]="player2Item"
-             typeaheadMinLength="2"
-             typeaheadOptionField="name"
-             formControlName="player2"
-             placeholder="Enter Player 2"
-             class="form-control">
-      <ng-template #player2Item let-player="item" class="btn-block">
-        <span>{{ player.name }}</span>
-      </ng-template>
-    </div>
-    <div class="form-group">
-      <div class="input-group">
+    <div class="row">
+      <div class="form-group col">
+        <label for="player2">Player 1</label>
+        <input [(ngModel)]="searchPlayer1"
+               [typeahead]="players_as_p1"
+               [typeaheadItemTemplate]="player1Item"
+               typeaheadMinLength="2"
+               typeaheadOptionField="name"
+               (typeaheadOnSelect)="onSelectP1($event)"
+               formControlName="player1"
+               placeholder="Enter Player 1"
+               class="form-control">
+        <ng-template #player1Item let-player="item" class="btn-block">
+          <span>{{ player.name }}</span>
+        </ng-template>
+      </div>
+      <div class="form-group col-2">
+        <label for="result">Result</label>
         <select class="form-control" formControlName="result">
           <option *ngFor="let gameResult of gameResultLabels | keys" [value]="gameResult.key">
             {{ gameResult.value }}
           </option>
         </select>
+      </div>
+      <div class="form-group col">
+        <label for="player2">Player 2</label>
+        <input [(ngModel)]="searchPlayer2"
+               [typeahead]="players_as_p2"
+               [typeaheadItemTemplate]="player2Item"
+               typeaheadMinLength="2"
+               typeaheadOptionField="name"
+               (typeaheadOnSelect)="onSelectP2($event)"
+               formControlName="player2"
+               placeholder="Enter Player 2"
+               class="form-control">
+        <ng-template #player2Item let-player="item" class="btn-block">
+          <span>{{ player.name }}</span>
+        </ng-template>
       </div>
     </div>
   </div>

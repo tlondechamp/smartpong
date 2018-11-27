@@ -52,18 +52,20 @@ class SeasonSerializer(serializers.ModelSerializer):
                 total += 1
                 if game.result in [GameResult.Result_20, GameResult.Result_21]:
                     wins += 1
-                    form.append('W')
+                    form.append((game.date, 'W'))
                 else:
                     losses += 1
-                    form.append('L')
+                    form.append((game.date, 'L'))
             for game in results.player.games_as_player2.all():
                 total += 1
                 if game.result in [GameResult.Result_02, GameResult.Result_12]:
                     wins += 1
-                    form.append('W')
+                    form.append((game.date, 'W'))
                 else:
                     losses += 1
-                    form.append('L')
+                    form.append((game.date, 'L'))
+            form = sorted(form)
+            form = [result[1] for result in form]
             data = {
                 'name': results.player.name,
                 'rating': results.elo_rating,
