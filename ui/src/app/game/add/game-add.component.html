@@ -22,6 +22,7 @@
       <div class="form-group col-2">
         <label for="result">Result</label>
         <select class="form-control" formControlName="result">
+          <option selected="true" disabled="disabled" [value]="null">--</option>
           <option *ngFor="let gameResult of gameResultLabels | keys" [value]="gameResult.key">
             {{ gameResult.value }}
           </option>

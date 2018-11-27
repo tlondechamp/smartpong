@@ -15,8 +15,8 @@
         <tbody>
           <tr *ngFor="let season of seasons" [routerLink]="['/seasons', season.id]">
             <td>{{ season.name }}</td>
-            <td>{{ season.start_date | date }}</td>
-            <td>{{ season.end_date | date }}</td>
+            <td>{{ season.start_date | date: 'longDate' }}</td>
+            <td>{{ season.end_date | date: 'longDate' }}</td>
           </tr>
         </tbody>
       </table>

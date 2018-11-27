@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { IndexComponent } from './index.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PlayerListComponent } from './player/list/player-list.component';
 import { SeasonComponent } from './season/season.component';
 import { SeasonListComponent } from './season/list/season-list.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'seasons', pathMatch: 'full' },
+    { path: '', component: IndexComponent, pathMatch: 'full' },
     { path: 'players', component: PlayerListComponent },
     { path: 'seasons', component: SeasonListComponent },
     { path: 'seasons/:id', component: SeasonComponent },

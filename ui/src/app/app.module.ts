@@ -12,6 +12,7 @@ import { TOASTER_LIFESPAN } from './constants';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { IndexComponent } from './index.component';
 import { GameComponent } from './game/game.component';
 import { GameAddComponent } from './game/add/game-add.component';
 import { GameListComponent } from './game/list/game-list.component';
@@ -30,6 +31,7 @@ import { KeysPipe } from './utils/keys-pipe';
 @NgModule({
   declarations: [
     AppComponent,
+    IndexComponent,
     GameComponent,
     GameAddComponent,
     GameListComponent,
