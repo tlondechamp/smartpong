@@ -1,11 +1,12 @@
 <div class="row mt-5">
-  <div class="col text-center my-3">
+  <div class="col-lg text-center my-3">
     <div>
-      <h1>
-        Ooops
-      </h1>
+      <h1><i class="fas fa-ghost mr-2"></i>Ooops</h1>
       <span>Sorry, the page you requested doesn't exist !</span>
     </div>
     <img id="logo_404" class="img-fluid mx-auto d-block my-3" [src]="logo_404">
+    <button type="button" class="btn-lg btn-primary" [routerLink]="['/']">
+      <i class="fas fa-home mr-2"></i>Take Me Home
+    </button>
   </div>
 </div>

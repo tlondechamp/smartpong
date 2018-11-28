@@ -9,11 +9,11 @@
 </div>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-6">
+    <div class="col-lg-6">
       <!-- Ranking table -->
       <h4><i class="fas fa-list-ol mr-2"></i>Ranking</h4>
       <div *ngIf="season?.ranking.ranking.length == 0" class="mb-3">
-        <h5 class="col">
+        <h5 class="col-lg">
           There are no ranked players for this season.
         </h5>
       </div>
@@ -47,7 +47,7 @@
       <!-- Unranked table -->
       <h4><i class="fas fa-layer-group mr-2"></i>Players to be ranked</h4>
       <div *ngIf="season?.ranking.placement.length == 0" class="mb-3">
-        <h5 class="col mt-3">
+        <h5 class="col-lg mt-3">
           There are no unranked players for this season.
         </h5>
       </div>
@@ -70,7 +70,7 @@
         </tbody>
       </table>
     </div>
-    <div class="col-6">
+    <div class="col-lg-6">
       <h4>
         <i class="fas fa-table-tennis mr-2"></i>Last Games
         <button type="button" class="btn btn-primary btn-sm float-right" (click)="addGame()">
@@ -79,7 +79,7 @@
       </h4>
       <!-- Last Games table -->
       <div *ngIf="games.data.length == 0" class="mb-3">
-        <h5 class="col">
+        <h5 class="col-lg">
           There are no games for this season.
         </h5>
       </div>
