@@ -51,7 +51,7 @@ import { KeysPipe } from './utils/keys-pipe';
     BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
     HttpClientModule,
     ModalModule.forRoot(),
     ToastrModule.forRoot({
