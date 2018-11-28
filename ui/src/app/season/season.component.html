@@ -24,7 +24,7 @@
               <th>Name</th>
               <th class="text-right">Score</th>
               <th class="text-right">Win Rate</th>
-              <th class="text-right">Recent Form</th>
+              <th class="text-right">Form</th>
             </tr>
         </thead>
         <tbody>
@@ -33,7 +33,7 @@
             <td>{{ player?.name }}</td>
             <td class="text-right">{{ player?.rating }}</td>
             <td class="text-right">{{ player?.win_percentage }}%</td>
-            <td class="text-right ">
+            <td class="text-right">
               <span *ngFor="let form of player?.form"
                     class="text-monospace badge ml-1"
                     [ngClass]="{'badge-success': form == 'W',

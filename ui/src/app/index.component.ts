@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { ROUTER_TIMEOUT } from './constants';
+
 import { SeasonService } from './season/season.service';
 
 @Component({
@@ -13,14 +15,20 @@ export class IndexComponent implements OnInit {
     private _router: Router,
   ) {}
 
+  readonly loader = 'assets/images/loader.gif';
+
   ngOnInit() {
     this._seasonService.list().subscribe(
       seasons => {
-        this._router.navigate(['/seasons', seasons[0].id]);
+        setTimeout(() => {
+          this._router.navigate(['/seasons', seasons[0].id]);
+        }, ROUTER_TIMEOUT);
       },
       error => {
         if (error.status === 404) {
-          this._router.navigate(['/seasons']);
+          setTimeout(() => {
+            this._router.navigate(['/seasons']);
+          }, ROUTER_TIMEOUT);
         }
       }
     );
