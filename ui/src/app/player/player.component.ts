@@ -27,25 +27,11 @@ export class PlayerComponent implements OnInit {
     responsive: true
   };
   public gameChartLabels = [];
-  public gameChartType = 'line';
+  public gameChartType = 'bar';
   public gameChartLegend = true;
   public gameChartColors = [
-    {
-      backgroundColor: 'rgba(38,114,38,0.2)',
-      borderColor: 'rgba(38,114,38,1)',
-      pointBackgroundColor: 'rgba(38,114,38,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(38,114,38,0.8)'
-    },
-    {
-      backgroundColor: 'rgba(218,16,16,0.2)',
-      borderColor: 'rgba(218,16,16,1)',
-      pointBackgroundColor: 'rgba(218,16,16,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(218,16,16,0.8)'
-    },
+    { backgroundColor: 'rgba(38,114,38,0.8)' },
+    { backgroundColor: 'rgba(218,16,16,0.8)' },
   ];
   public gameChartData = [
     {data: [], label: 'Wins'},
