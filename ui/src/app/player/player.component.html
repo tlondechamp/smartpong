@@ -1,3 +1,70 @@
-<p>
-  player works!
-</p>
+<div *ngIf="player" class="container-fluid mt-5">
+  <div class="header clearfix">
+    <h2 class="text-muted"><i class="fas fa-child mr-2"></i>{{player?.name}}</h2>
+  </div>
+  <div class="row mt-2">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th class="text-center">Season</th>
+            <th class="text-center">Games</th>
+            <th class="text-center">Win Rate</th>
+            <th class="text-center">Wins</th>
+            <th class="text-center">Losses</th>
+            <th class="text-center">Min Score</th>
+            <th class="text-center">Score</th>
+            <th class="text-center">Max Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let stats of player?.stats.seasons | keys">
+            <td class="text-center">{{ stats.key }}</td>
+            <td class="text-center">{{ stats.value.games }}</td>
+            <td class="text-center">{{ stats.value.win_percentage }}</td>
+            <td class="text-center">{{ stats.value.wins }}</td>
+            <td class="text-center">{{ stats.value.losses }}</td>
+            <td class="text-center">{{ stats.value.min_rating }}</td>
+            <td class="text-center">{{ stats.value.rating }}</td>
+            <td class="text-center">{{ stats.value.max_rating }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col-lg">
+      <h4>Stats by Season</h4>
+      <div class="row">
+        <div class="col-lg-6 mt-2">
+          <div class="card">
+            <h5 class="card-header">Game Stats</h5>
+            <div class="card-body">
+              <canvas baseChart
+                      [colors]="gameChartColors"
+                      [datasets]="gameChartData"
+                      [labels]="gameChartLabels"
+                      [options]="gameChartOptions"
+                      [legend]="gameChartLegend"
+                      [chartType]="gameChartType"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mt-2">
+          <div class="card">
+            <h5 class="card-header">Score Stats</h5>
+            <div class="card-body">
+              <canvas baseChart
+                      [colors]="scoreChartColors"
+                      [datasets]="scoreChartData"
+                      [labels]="scoreChartLabels"
+                      [options]="scoreChartOptions"
+                      [legend]="scoreChartLegend"
+                      [chartType]="scoreChartType"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -97,16 +97,10 @@ class Game(models.Model):
     def _update_player_rating(self, result, score, old_rating, opponent_rating):
         new_rating = Elo.get_new_rating(score, old_rating, opponent_rating)
         result.elo_rating = new_rating
-
-        ranked_games = Game.objects.filter(season=result.season, phase=GamePhase.Ranked)
-
-        if ranked_games.filter(
-                    models.Q(player1=result.player)|models.Q(player2=result.player)
-                ).count() >= result.season.placement_games:
-            result.min_rating = (min(result.min_rating, new_rating) if
-                result.min_rating is not None else new_rating)
-            result.max_rating = (max(result.max_rating, new_rating) if
-                result.max_rating is not None else new_rating)
+        result.min_rating = (min(result.min_rating, new_rating) if
+            result.min_rating is not None else new_rating)
+        result.max_rating = (max(result.max_rating, new_rating) if
+            result.max_rating is not None else new_rating)
 
         result.save()
         return new_rating - old_rating

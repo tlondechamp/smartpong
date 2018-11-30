@@ -8,10 +8,97 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from project.app.models import Game, GameResult, Player, PlayerResults, Season
 
 
+def get_percentage(wins, total_games):
+    return round(100 * wins / float(total_games), 1)
+
+
+def get_data_from_player_result(result):
+    total_games = 0
+    wins = 0
+    losses = 0
+    form = []
+    for game in result.player.games_as_player1.filter(season=result.season):
+        total_games += 1
+        if game.result in [GameResult.Result_20, GameResult.Result_21]:
+            wins += 1
+            form.append((game.date, 'W'))
+        else:
+            losses += 1
+            form.append((game.date, 'L'))
+
+    for game in result.player.games_as_player2.filter(season=result.season):
+        total_games += 1
+        if game.result in [GameResult.Result_02, GameResult.Result_12]:
+            wins += 1
+            form.append((game.date, 'W'))
+        else:
+            losses += 1
+            form.append((game.date, 'L'))
+
+    form = sorted(form)
+    form = [result[1] for result in form]
+
+    data = {
+        'id': result.player.id,
+        'name': result.player.name,
+        'rating': result.elo_rating,
+        'min_rating': result.min_rating,
+        'max_rating': result.max_rating,
+        'form': form[-5:],
+        'games': total_games,
+        'losses': losses,
+        'win_percentage': get_percentage(wins, total_games),
+        'wins': wins,
+    }
+    return data, total_games
+
+
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
         fields = '__all__'
+
+    stats = serializers.SerializerMethodField()
+
+    def get_stats(self, player):
+        response = {
+            'global': {
+                'games': 0,
+                'wins': 0,
+                'losses': 0,
+                'min_rating': 1000,
+                'max_rating': 1000,
+            },
+            'seasons': {}
+        }
+        for result in player.season_results.prefetch_related(
+                    Prefetch(
+                        'player__games_as_player1', queryset=Game.objects.filter(player1=player)),
+                    Prefetch(
+                        'player__games_as_player2', queryset=Game.objects.filter(player2=player))
+                ).all():
+            data, total_games = get_data_from_player_result(result)
+            response['seasons'][result.season.id] = data
+            response['global']['min_rating'] = min(
+                response['global']['min_rating'],
+                response['seasons'][result.season.id]['min_rating']
+            )
+            response['global']['max_rating'] = max(
+                response['global']['max_rating'],
+                response['seasons'][result.season.id]['max_rating']
+            )
+            response['global']['games'] += total_games
+            response['global']['wins'] += response['seasons'][result.season.id]['wins']
+            response['global']['losses'] += response['seasons'][result.season.id]['losses']
+        response['global']['win_percentage'] = get_percentage(
+            response['global']['wins'], response['global']['games'])
+        return response
+
+
+class SimplePlayerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Player
+        fields = ('id', 'name', 'email')
 
 
 class SeasonSerializer(serializers.ModelSerializer):
@@ -37,52 +124,21 @@ class SeasonSerializer(serializers.ModelSerializer):
         current_rank = 0
         next_rank = 0
         current_elo = None
-        for results in PlayerResults.objects.filter(season=season).select_related(
+        for result in PlayerResults.objects.filter(season=season).select_related(
                 'player').prefetch_related(
                     Prefetch('player__games_as_player1',
                              queryset=Game.objects.filter(season=season)),
                     Prefetch('player__games_as_player2',
                              queryset=Game.objects.filter(season=season))).order_by('-elo_rating'):
-
-            total = 0
-            wins = 0
-            losses = 0
-            form = []
-            for game in results.player.games_as_player1.all():
-                total += 1
-                if game.result in [GameResult.Result_20, GameResult.Result_21]:
-                    wins += 1
-                    form.append((game.date, 'W'))
-                else:
-                    losses += 1
-                    form.append((game.date, 'L'))
-            for game in results.player.games_as_player2.all():
-                total += 1
-                if game.result in [GameResult.Result_02, GameResult.Result_12]:
-                    wins += 1
-                    form.append((game.date, 'W'))
-                else:
-                    losses += 1
-                    form.append((game.date, 'L'))
-            form = sorted(form)
-            form = [result[1] for result in form]
-            data = {
-                'name': results.player.name,
-                'rating': results.elo_rating,
-                'games': total,
-                'wins': wins,
-                'losses': losses,
-                'win_percentage': round(100 * wins / float(total), 1),
-                'form': form[-5:],
-            }
-            if total >= season.placement_games:
+            data, total_games = get_data_from_player_result(result)
+            if total_games >= season.placement_games:
                 next_rank += 1
-                if not current_elo or results.elo_rating != current_elo:
+                if not current_elo or result.elo_rating != current_elo:
                     current_rank = next_rank
-                    current_elo = results.elo_rating
+                    current_elo = result.elo_rating
                 data['rank'] = current_rank
                 response['ranking'].append(data)
-            elif total > 0:
+            elif total_games > 0:
                 response['placement'].append(data)
 
         return response
@@ -91,8 +147,8 @@ class SeasonSerializer(serializers.ModelSerializer):
 class GameSerializer(serializers.ModelSerializer):
     player1 = PrimaryKeyRelatedField(queryset=Player.objects.all())
     player2 = PrimaryKeyRelatedField(queryset=Player.objects.all())
-    player1_details = PlayerSerializer(source='player1', read_only=True)
-    player2_details = PlayerSerializer(source='player2', read_only=True)
+    player1_details = SimplePlayerSerializer(source='player1', read_only=True)
+    player2_details = SimplePlayerSerializer(source='player2', read_only=True)
 
     class Meta:
         model = Game

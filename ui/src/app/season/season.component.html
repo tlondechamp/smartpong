@@ -20,7 +20,7 @@
       <table *ngIf="season?.ranking.ranking.length > 0" class="table table-hover mb-3">
         <thead>
             <tr>
-              <th>Rank</th>
+              <th class="text-center">Rank</th>
               <th>Name</th>
               <th class="text-right">Score</th>
               <th class="text-right">Win Rate</th>
@@ -28,8 +28,13 @@
             </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let player of season?.ranking.ranking">
-            <td>{{ player?.rank }}</td>
+          <tr *ngFor="let player of season?.ranking.ranking" [routerLink]="['/players', player?.id]">
+            <td class="text-center">
+              <span class="badge badge-pill"
+                    [ngClass]="{'badge-success': player?.rank <= 8}">
+                  {{ player?.rank }}
+              </span>
+            </td>
             <td>{{ player?.name }}</td>
             <td class="text-right">{{ player?.rating }}</td>
             <td class="text-right">{{ player?.win_percentage }}%</td>
@@ -61,7 +66,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let player of season?.ranking.placement">
+          <tr *ngFor="let player of season?.ranking.placement" [routerLink]="['/players', player?.id]">
             <td>{{ player?.name }}</td>
             <td class="text-right">{{ player?.games }} / {{ season?.placement_games }}</td>
             <td class="text-right">{{ player?.rating }}</td>

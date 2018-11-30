@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { ToastrModule } from 'ngx-toastr';
+import { ChartsModule } from 'ng2-charts';
 
 import { TOASTER_LIFESPAN } from './constants';
 
@@ -50,6 +51,7 @@ import { KeysPipe } from './utils/keys-pipe';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    ChartsModule,
     FormsModule,
     ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
     HttpClientModule,
