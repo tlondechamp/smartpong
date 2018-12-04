@@ -9,6 +9,8 @@ from project.app.models import Game, GameResult, Player, PlayerResults, Season
 
 
 def get_percentage(wins, total_games):
+    if total_games == 0:
+        return 'N/A'
     return round(100 * wins / float(total_games), 1)
 
 

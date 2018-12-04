@@ -63,8 +63,8 @@ class PlayerResults(models.Model):
     player = models.ForeignKey(Player, related_name='season_results', on_delete=models.CASCADE)
     season = models.ForeignKey(Season, related_name='player_results', on_delete=models.CASCADE)
     elo_rating = models.IntegerField(default=1000, db_index=True)
-    min_rating = models.IntegerField(null=True)
-    max_rating = models.IntegerField(null=True)
+    min_rating = models.IntegerField(default=1000)
+    max_rating = models.IntegerField(default=1000)
 
     class Meta:
         unique_together = (('season', 'player'),)

@@ -13,7 +13,7 @@
       <!-- Ranking table -->
       <h4><i class="fas fa-list-ol mr-2"></i>Ranking</h4>
       <div *ngIf="season?.ranking.ranking.length == 0" class="mb-3">
-        <h5 class="col-lg">
+        <h5 class="col-lg mt-3">
           There are no ranked players for this season.
         </h5>
       </div>
@@ -31,7 +31,8 @@
           <tr *ngFor="let player of season?.ranking.ranking" [routerLink]="['/players', player?.id]">
             <td class="text-center">
               <span class="badge badge-pill"
-                    [ngClass]="{'badge-success': player?.rank <= 8}">
+                    [ngClass]="{'badge-success': player?.rank <= 8,
+                                'badge-secondary': player?.rank > 8}">
                   {{ player?.rank }}
               </span>
             </td>
@@ -77,7 +78,7 @@
     </div>
     <div class="col-lg-6">
       <h4>
-        <i class="fas fa-table-tennis mr-2"></i>Last Games
+        <i class="fas fa-table-tennis mr-2"></i>Last {{games.data.length}} Games
         <button type="button" class="btn btn-primary btn-sm float-right" (click)="addGame()">
           <i class="fas fa-plus mr-2"></i>Add Game
         </button>

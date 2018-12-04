@@ -24,6 +24,13 @@ export class PlayerComponent implements OnInit {
 
   // Game Chart (line)
   public gameChartOptions = {
+    scales: {
+      yAxes: [{
+         ticks: {
+            min : 0
+          }
+      }]
+    },
     responsive: true
   };
   public gameChartLabels = [];
@@ -41,7 +48,14 @@ export class PlayerComponent implements OnInit {
   // Score chart (bar)
   public scoreChartOptions = {
     scaleShowVerticalLines: false,
-    responsive: true
+    scales: {
+      yAxes: [{
+         ticks: {
+            min : 800
+          }
+      }]
+    },
+    responsive: true,
   };
   public scoreChartLabels = [];
   public scoreChartType = 'bar';
