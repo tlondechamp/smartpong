@@ -100,7 +100,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let game of games.data">
-            <td>
+            <td [routerLink]="['/players', game?.player1]">
               {{ game?.player1_details.name }}
               <span class="badge ml-1"
                     [ngClass]="{'badge-success': game.player1_rating_change > 0,
@@ -109,7 +109,7 @@
                 {{ game?.player1_rating_change }}
               </span>
             </td>
-            <td>
+            <td [routerLink]="['/players', game?.player2]">
               {{ game?.player2_details.name }}
               <span class="badge ml-1"
                     [ngClass]="{'badge-success': game.player2_rating_change > 0,
