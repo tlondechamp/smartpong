@@ -1,3 +1,5 @@
+from collections import defaultdict
+from operator import itemgetter
 import json
 
 from django.db.models import Prefetch
@@ -14,31 +16,55 @@ def get_percentage(wins, total_games):
     return round(100 * wins / float(total_games), 1)
 
 
+def get_opponent(opponents, player):
+    return opponents.setdefault(player.id, defaultdict(int, {
+        'id': player.id,
+        'name': player.name,
+        'games': 0,
+        'wins': 0,
+        'losses': 0,
+    }))
+
+
 def get_data_from_player_result(result):
     total_games = 0
     wins = 0
     losses = 0
     form = []
+    opponents = {}
+
     for game in result.player.games_as_player1.filter(season=result.season):
         total_games += 1
+        opponent = get_opponent(opponents, game.player2)
+        opponent['games'] += 1
         if game.result in [GameResult.Result_20, GameResult.Result_21]:
             wins += 1
             form.append((game.date, 'W'))
+            opponent['wins'] += 1
         else:
             losses += 1
             form.append((game.date, 'L'))
+            opponent['losses'] += 1
 
     for game in result.player.games_as_player2.filter(season=result.season):
         total_games += 1
+        opponent = get_opponent(opponents, game.player1)
+        opponent['games'] += 1
         if game.result in [GameResult.Result_02, GameResult.Result_12]:
             wins += 1
             form.append((game.date, 'W'))
+            opponent['wins'] += 1
         else:
             losses += 1
             form.append((game.date, 'L'))
+            opponent['losses'] += 1
 
     form = sorted(form)
     form = [result[1] for result in form]
+
+    opponents = sorted(opponents.values(), key=itemgetter('wins'), reverse=True)
+    for opponent in opponents:
+        opponent['win_percentage'] = get_percentage(opponent['wins'], opponent['games'])
 
     data = {
         'id': result.player.id,
@@ -47,6 +73,7 @@ def get_data_from_player_result(result):
         'min_rating': result.min_rating,
         'max_rating': result.max_rating,
         'form': form[-5:],
+        'opponents': opponents,
         'games': total_games,
         'losses': losses,
         'win_percentage': get_percentage(wins, total_games),
@@ -80,6 +107,7 @@ class PlayerSerializer(serializers.ModelSerializer):
                         'player__games_as_player2', queryset=Game.objects.filter(player2=player))
                 ).all():
             data, total_games = get_data_from_player_result(result)
+
             response['seasons'][result.season.id] = data
             response['global']['min_rating'] = min(
                 response['global']['min_rating'],
@@ -94,6 +122,7 @@ class PlayerSerializer(serializers.ModelSerializer):
             response['global']['losses'] += response['seasons'][result.season.id]['losses']
         response['global']['win_percentage'] = get_percentage(
             response['global']['wins'], response['global']['games'])
+
         return response
 
 
