@@ -1,6 +1,12 @@
 <div *ngIf="player" class="container-fluid mt-4">
   <div class="header clearfix">
-    <h2 class="text-muted"><i class="fas fa-child mr-2"></i>{{player?.name}}</h2>
+    <h2 class="text-muted">
+      <i class="fas fa-child mr-2"></i>{{player?.name}}
+      <span class="pull-right">
+        <i class="fas fa-trophy" style="color: gold"></i>
+        {{ player?.stats.global.max_rating }}
+      </span>
+    </h2>
   </div>
   <div class="row mt-3">
     <div class="col-lg">
