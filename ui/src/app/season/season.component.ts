@@ -12,29 +12,11 @@ import { DATE_FORMAT, NB_LAST_GAMES } from '../constants';
 import { Game } from '../game/game.interface';
 import { GameAddComponent } from '../game/add/game-add.component';
 import { GameService } from '../game/game.service';
+import { GameSource } from '../game/utils/game.source';
 import { GameResultLabels } from '../game/game.enum';
 import { Season } from './season.interface';
 import { SeasonService } from './season.service';
 
-
-class GameSource {
-  private _data: BehaviorSubject<Game[]>;
-
-  get data(): Game[] { return this._data.getValue(); }
-  set data(games: Game[]) {
-    this._data.next(games);
-  }
-
-  constructor() {
-    this._data = new BehaviorSubject<Game[]>([]);
-  }
-
-  // Add Game on top of array, not at the end
-  add(game: Game) {
-    this.data.splice(0, 0, game);
-  }
-
-}
 
 @Component({
   selector: 'app-season',
@@ -65,10 +47,13 @@ export class SeasonComponent implements OnInit {
                         .subscribe(
                           season => {
                             this.season = season;
-                            this._gameService.list({'season': this.season.id})
-                                             .subscribe(games => {
-                                               this.games.data = games.slice(0, NB_LAST_GAMES);
-                                             });
+                            this._gameService.list({
+                              'season': this.season.id,
+                              'player1': '',
+                              'player2': '',
+                            }).subscribe(games => {
+                             this.games.data = games.slice(0, NB_LAST_GAMES);
+                           });
                           },
                           error => {
                             if (error.status === 404) {
@@ -77,6 +62,10 @@ export class SeasonComponent implements OnInit {
                           }
                         )
     );
+  }
+
+  ngOnDestroy() {
+    this._season$.unsubscribe();
   }
 
   addGame() {

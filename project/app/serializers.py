@@ -30,6 +30,7 @@ def get_data_from_player_result(result):
     total_games = 0
     wins = 0
     losses = 0
+    last_games = []
     form = []
     opponents = {}
 
@@ -37,6 +38,7 @@ def get_data_from_player_result(result):
         total_games += 1
         opponent = get_opponent(opponents, game.player2)
         opponent['games'] += 1
+        last_games.append((game.date, game))
         if game.result in [GameResult.Result_20, GameResult.Result_21]:
             wins += 1
             form.append((game.date, 'W'))
@@ -50,6 +52,7 @@ def get_data_from_player_result(result):
         total_games += 1
         opponent = get_opponent(opponents, game.player1)
         opponent['games'] += 1
+        last_games.append((game.date, game))
         if game.result in [GameResult.Result_02, GameResult.Result_12]:
             wins += 1
             form.append((game.date, 'W'))
@@ -59,6 +62,8 @@ def get_data_from_player_result(result):
             form.append((game.date, 'L'))
             opponent['losses'] += 1
 
+    last_games = sorted(last_games, reverse=True)
+    last_games = [GameSerializer(game[1]).data for game in last_games]
     form = sorted(form)
     form = [result[1] for result in form]
 
@@ -74,6 +79,7 @@ def get_data_from_player_result(result):
         'max_rating': result.max_rating,
         'form': form[-5:],
         'opponents': opponents,
+        'last_games': last_games[:10],
         'games': total_games,
         'losses': losses,
         'win_percentage': get_percentage(wins, total_games),

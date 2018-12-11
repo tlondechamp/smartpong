@@ -4,6 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
+import { DATE_FORMAT } from '../constants';
+
+import { Game } from '../game/game.interface';
+import { GameResultLabels } from '../game/game.enum';
+import { GameService } from '../game/game.service';
+import { GameSource } from '../game/utils/game.source';
 import { Player } from './player.interface';
 import { PlayerService } from './player.service';
 
@@ -16,13 +22,40 @@ export class PlayerComponent implements OnInit, OnDestroy {
   favoriteOpponent: object;
   petPeeveOpponent: object;
 
+  public games: GameSource = new GameSource();
+
   private _player$: Subscription;
 
+  readonly DateFormat = DATE_FORMAT;
+  readonly gameResultLabels = GameResultLabels;
+
   constructor(
+    private _gameService: GameService,
     private _playerService: PlayerService,
     private _route: ActivatedRoute,
     private _router: Router,
   ) {}
+
+  // Score Evolution Chart
+  public scoreEvolutionChartData:Array<any> = [
+    {data: [], label: 'Score'},
+  ];
+  public scoreEvolutionChartLabels:Array<any> = [];
+  public scoreEvolutionChartOptions:any = {
+    responsive: true
+  };
+  public scoreEvolutionChartColors:Array<any> = [
+    {
+      backgroundColor: 'rgba(63,127,191,0.2)',
+      borderColor: 'rgba(63,127,191,1)',
+      pointBackgroundColor: 'rgba(63,127,191,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(63,127,191,0.8)'
+    }
+  ];
+  public scoreEvolutionChartLegend:boolean = true;
+  public scoreEvolutionChartType:string = 'line';
 
   // Game Chart
   public gameChartOptions = {
@@ -103,6 +136,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
                         .subscribe(
                           player => {
                             this.player = player;
+                            this.fillLastGamesTab(this.player);
                             this.fillGlobalTab(this.player);
                             this.fillSeasonTabs(this.player);
                           },
@@ -117,6 +151,30 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this._player$.unsubscribe();
+  }
+
+  fillLastGamesTab(player: Player) {
+    const currentSeason = Object.keys(player.stats['seasons']).length;
+    const lastGames = Object.entries(player.stats['seasons'][currentSeason]['last_games']);
+    let playerScore = player.stats['seasons'][currentSeason]['rating'];
+
+    this.scoreEvolutionChartLabels.splice(0, 0, 'Now');
+    this.scoreEvolutionChartData[0].data.splice(0, 0, playerScore);
+    for (let [key, game] of lastGames) {
+      this.games.push(game as Game);
+      // Score Evolution Chart
+      console.log(playerScore);
+      this.scoreEvolutionChartLabels.splice(0, 0, 'Game #' + game['id']);
+      if (player.id == game['player1']) {
+        console.log(game['player1_rating_change']);
+        playerScore -= game['player1_rating_change'];
+      }
+      if (player.id == game['player2']) {
+        console.log(game['player2_rating_change']);
+        playerScore -= game['player2_rating_change'];
+      }
+      this.scoreEvolutionChartData[0].data.splice(0, 0, playerScore);
+    }
   }
 
   fillGlobalTab(player: Player) {

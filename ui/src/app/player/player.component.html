@@ -1,11 +1,80 @@
 <div *ngIf="player" class="container-fluid mt-4">
   <div class="header clearfix">
-    <h2 class="text-muted"><i class="fas fa-child mr-2"></i>{{player?.name}}</h2>
+    <h2 class="text-muted">
+      <i class="fas fa-child mr-2"></i>{{player?.name}}
+      <span class="pull-right">
+        Best
+        <i class="fas fa-trophy" style="color: gold"></i>
+        {{ player?.stats.global.max_rating }}
+      </span>
+    </h2>
   </div>
   <div class="row mt-3">
     <div class="col-lg">
       <tabset>
-        <tab heading="Global Stats" active="true">
+        <tab heading="Last Games" active="true">
+          <div class="row">
+            <div *ngIf="games.data.length == 0" class="col-lg-6 mt-2 mb-2">
+              <div class="card">
+                <h5 class="card-header">Last Games</h5>
+                <div class="card-body">
+                  <h5 class="col-lg">
+                    There are no recent games for this player.
+                  </h5>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="games.data.length > 0" class="col-lg-6 mt-2 mb-2">
+              <div class="card">
+                <h5 class="card-header">Last {{ games.data.length }} Games</h5>
+                <div class="card-body">
+                  <table class="table table-hover mb-3">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Player 1</th>
+                        <th>Player 2</th>
+                        <th class="text-right">Result</th>
+                        <th class="text-right">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let game of games.data"
+                          [ngClass]="{
+                          'table-success':
+                            (this.player.id == game.player1 && game.player1_rating_change > 0 ||
+                             this.player.id == game.player2 && game.player2_rating_change > 0),
+                          'table-danger':
+                            (this.player.id == game.player1 && game.player1_rating_change < 0 ||
+                             this.player.id == game.player2 && game.player2_rating_change < 0)}">
+                        <td>{{ game?.id }}</td>
+                        <td>{{ game?.player1_details.name }}</td>
+                        <td>{{ game?.player2_details.name }}</td>
+                        <td class="text-right">{{ gameResultLabels[game?.result] }}</td>
+                        <td class="text-right">{{ game?.date | date: DateFormat }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 mt-2 mb-2">
+              <div class="card">
+                <h5 class="card-header">Score Evolution</h5>
+                <div class="card-body">
+                  <canvas baseChart
+                          [datasets]="scoreEvolutionChartData"
+                          [labels]="scoreEvolutionChartLabels"
+                          [options]="scoreEvolutionChartOptions"
+                          [colors]="scoreEvolutionChartColors"
+                          [legend]="scoreEvolutionChartLegend"
+                          [chartType]="scoreEvolutionChartType"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Global Stats">
           <div class="row">
             <div class="col-lg-6 mt-2">
               <div class="card">
@@ -91,5 +160,6 @@
           </div>
         </tab>
       </tabset>
+    </div>
   </div>
 </div>

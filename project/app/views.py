@@ -38,7 +38,9 @@ class GameFilter(FilterSet):
     class Meta:
         model = Game
         fields = {
-            'season': ['exact', 'isnull'],
+            'season': ['exact'],
+            'player1': ['exact'],
+            'player2': ['exact'],
             'phase': ['exact'],
             'date': ['gt', 'gte', 'lt', 'lte'],
         }
