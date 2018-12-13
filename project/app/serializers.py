@@ -10,6 +10,22 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from project.app.models import Game, GameResult, Player, PlayerResults, Season
 
 
+PLAYER1_WIN = [
+    GameResult.Result_20,
+    GameResult.Result_21,
+    GameResult.Result_30,
+    GameResult.Result_31,
+    GameResult.Result_32,
+]
+PLAYER2_WIN = [
+    GameResult.Result_02,
+    GameResult.Result_12,
+    GameResult.Result_03,
+    GameResult.Result_13,
+    GameResult.Result_23,
+]
+
+
 def get_percentage(wins, total_games):
     if total_games == 0:
         return 'N/A'
@@ -39,7 +55,7 @@ def get_data_from_player_result(result):
         opponent = get_opponent(opponents, game.player2)
         opponent['games'] += 1
         last_games.append((game.date, game))
-        if game.result in [GameResult.Result_20, GameResult.Result_21]:
+        if game.result in PLAYER1_WIN:
             wins += 1
             form.append((game.date, 'W'))
             opponent['wins'] += 1
@@ -53,7 +69,7 @@ def get_data_from_player_result(result):
         opponent = get_opponent(opponents, game.player1)
         opponent['games'] += 1
         last_games.append((game.date, game))
-        if game.result in [GameResult.Result_02, GameResult.Result_12]:
+        if game.result in PLAYER2_WIN:
             wins += 1
             form.append((game.date, 'W'))
             opponent['wins'] += 1

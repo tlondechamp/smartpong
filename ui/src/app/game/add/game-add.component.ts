@@ -9,7 +9,7 @@ import { mergeMap } from 'rxjs/operators';
 import { Player } from '../../player/player.interface';
 import { PlayerService } from '../../player/player.service';
 import { Game } from '../game.interface';
-import { GameResultLabels } from '../game.enum';
+import { ThreeSetsGameResultLabels, FiveSetsGameResultLabels } from '../game.enum';
 
 @Component({
   selector: 'app-game-add',
@@ -27,7 +27,8 @@ export class GameAddComponent implements OnInit {
   public gameForm: FormGroup;
   public gameCreated: Subject<Game>;
 
-  readonly gameResultLabels = GameResultLabels;
+  readonly threeSetsGameResultLabels = ThreeSetsGameResultLabels;
+  readonly fiveSetsGameResultLabels = FiveSetsGameResultLabels;
 
   constructor(
     public modalRef: BsModalRef,

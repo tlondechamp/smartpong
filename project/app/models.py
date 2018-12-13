@@ -12,13 +12,38 @@ class GameResult(object):
     Result_21 = 1
     Result_12 = 2
     Result_02 = 3
+    Result_30 = 4
+    Result_31 = 5
+    Result_32 = 6
+    Result_23 = 7
+    Result_13 = 8
+    Result_03 = 9
 
     choices = (
         (Result_20, '2-0'),
         (Result_21, '2-1'),
         (Result_02, '0-2'),
         (Result_12, '1-2'),
+        (Result_30, '3-0'),
+        (Result_31, '3-1'),
+        (Result_32, '3-2'),
+        (Result_23, '2-3'),
+        (Result_13, '1-3'),
+        (Result_03, '0-3'),
     )
+
+    result_mapping = {
+        Result_20: (1, 0),
+        Result_21: (0.67, 0.33),
+        Result_12: (0.33, 0.67),
+        Result_02: (0, 1),
+        Result_30: (1, 0),
+        Result_31: (0.75, 0.25),
+        Result_32: (0.6, 0.4),
+        Result_23: (0.4, 0.6),
+        Result_13: (0.25, 0.75),
+        Result_03: (0, 1),
+    }
 
 
 class GamePhase(object):
@@ -106,15 +131,9 @@ class Game(models.Model):
         return new_rating - old_rating
 
     def _get_player_scores(self):
-        if self.result == GameResult.Result_20:
-            return (1, 0)
-        if self.result == GameResult.Result_21:
-            return (0.67, 0.33)
-        if self.result == GameResult.Result_12:
-            return (0.33, 0.67)
-        if self.result == GameResult.Result_02:
-            return (0, 1)
-        raise RuntimeError('Invalid result value: %s' % self.result)
+        if self.result not in GameResult.result_mapping.keys():
+            raise RuntimeError('Invalid result value: %s' % self.result)
+        return GameResult.result_mapping.get(self.result)
 
 
 def game_post_save(sender, instance, created, **kwargs):

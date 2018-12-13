@@ -23,7 +23,14 @@
         <label for="result">Result</label>
         <select class="form-control" formControlName="result">
           <option selected="true" disabled="disabled" [value]="null">--</option>
-          <option *ngFor="let gameResult of gameResultLabels | keys" [value]="gameResult.key">
+          <option disabled="disabled" [value]="null">3 Sets</option>
+          <option *ngFor="let gameResult of threeSetsGameResultLabels | keys"
+                  [value]="gameResult.key">
+            {{ gameResult.value }}
+          </option>
+          <option disabled="disabled" [value]="null">5 Sets</option>
+          <option *ngFor="let gameResult of fiveSetsGameResultLabels | keys"
+                  [value]="gameResult.key">
             {{ gameResult.value }}
           </option>
         </select>

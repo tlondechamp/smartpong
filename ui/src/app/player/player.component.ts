@@ -22,19 +22,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
   favoriteOpponent: object;
   petPeeveOpponent: object;
 
-  public games: GameSource = new GameSource();
+  public games: GameSource;
 
   private _player$: Subscription;
 
   readonly DateFormat = DATE_FORMAT;
   readonly gameResultLabels = GameResultLabels;
-
-  constructor(
-    private _gameService: GameService,
-    private _playerService: PlayerService,
-    private _route: ActivatedRoute,
-    private _router: Router,
-  ) {}
 
   // Score Evolution Chart
   public scoreEvolutionChartData:Array<any> = [
@@ -130,6 +123,15 @@ export class PlayerComponent implements OnInit, OnDestroy {
     {data: [], label: 'Max Score'},
   ];
 
+  constructor(
+    private _gameService: GameService,
+    private _playerService: PlayerService,
+    private _route: ActivatedRoute,
+    private _router: Router,
+  ) {
+    this.games = new GameSource();
+  }
+
   ngOnInit() {
     this._player$ = (
       this._route.params.pipe(switchMap(params => this._playerService.retrieve(+params['id'])))
@@ -163,14 +165,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
     for (let [key, game] of lastGames) {
       this.games.push(game as Game);
       // Score Evolution Chart
-      console.log(playerScore);
       this.scoreEvolutionChartLabels.splice(0, 0, 'Game #' + game['id']);
       if (player.id == game['player1']) {
-        console.log(game['player1_rating_change']);
         playerScore -= game['player1_rating_change'];
       }
       if (player.id == game['player2']) {
-        console.log(game['player2_rating_change']);
         playerScore -= game['player2_rating_change'];
       }
       this.scoreEvolutionChartData[0].data.splice(0, 0, playerScore);
