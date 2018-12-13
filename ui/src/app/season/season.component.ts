@@ -27,7 +27,7 @@ export class SeasonComponent implements OnInit {
 
   private _season$: Subscription;
 
-  public games: GameSource = new GameSource();
+  public games: GameSource;
 
   readonly DateFormat = DATE_FORMAT;
   readonly gameResultLabels = GameResultLabels;
@@ -39,7 +39,9 @@ export class SeasonComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private toastr: ToastrService
-  ) {}
+  ) {
+    this.games = new GameSource();
+  }
 
   ngOnInit() {
     this._season$ = (
@@ -75,8 +77,7 @@ export class SeasonComponent implements OnInit {
             .subscribe(
               (new_game) => {
                 this.games.add(new_game);
-                this._seasonService.retrieve(this.season.id)
-                                   .subscribe(season => this.season = season);
+                this.ngOnInit();
                 this.toastr.success('Your game has been registered !', 'Success');
               },
               () => this.toastr.error('Error while registering your game !', 'Failed')
