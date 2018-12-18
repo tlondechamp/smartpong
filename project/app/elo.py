@@ -1,8 +1,5 @@
-from __future__ import division
-
-
 class Elo(object):
-    R = 400
+    R = 800
     K = 40
 
     @classmethod

@@ -42,11 +42,11 @@
                       <tr *ngFor="let game of games.data"
                           [ngClass]="{
                           'table-success':
-                            (this.player.id == game.player1 && game.player1_rating_change > 0 ||
-                             this.player.id == game.player2 && game.player2_rating_change > 0),
+                            (this.player.id == game.player1 && [0,1,4,5,6].includes(game.result) ||
+                             this.player.id == game.player2 && [2,3,7,8,9].includes(game.result)),
                           'table-danger':
-                            (this.player.id == game.player1 && game.player1_rating_change < 0 ||
-                             this.player.id == game.player2 && game.player2_rating_change < 0)}">
+                            (this.player.id == game.player1 && [2,3,7,8,9].includes(game.result) ||
+                             this.player.id == game.player2 && [0,1,4,5,6].includes(game.result))}">
                         <td>{{ game?.id }}</td>
                         <td>{{ game?.player1_details.name }}</td>
                         <td>{{ game?.player2_details.name }}</td>
