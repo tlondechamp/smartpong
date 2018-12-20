@@ -4,19 +4,19 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
+import { ChartsModule } from 'ng2-charts';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { ToastrModule } from 'ngx-toastr';
-import { ChartsModule } from 'ng2-charts';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 
 import { TOASTER_LIFESPAN } from './constants';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { IndexComponent } from './index.component';
-import { GameComponent } from './game/game.component';
 import { GameAddComponent } from './game/add/game-add.component';
+import { GameComponent } from './game/game.component';
 import { GameListComponent } from './game/list/game-list.component';
 import { GameService } from './game/game.service';
 import { NavigationComponent } from './navigation/navigation.component';

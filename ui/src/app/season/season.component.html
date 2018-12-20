@@ -1,13 +1,16 @@
-<div class="jumbotron jumbotron-fluid">
+<div *ngIf="season && currentSeason" class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1><i class="fas fa-globe-americas mr-2"></i>{{ season?.name }}</h1>
+    <h1>
+      <i class="fas fa-globe-americas mr-2"></i>{{ season?.name }}
+      <i *ngIf="isCompleted()" class="far fa-check-circle" style="color: green"></i>
+    </h1>
     <p>
       Qualifications from <b>{{ season?.start_date | date: 'longDate' }}</b> to <b>{{ season?.end_date | date: 'longDate' }}</b>.
       Each player must play <b>{{ season?.placement_games }} games</b> before entering the ranking.
     </p>
   </div>
 </div>
-<div class="container-fluid">
+<div *ngIf="season && currentSeason" class="container-fluid">
   <div class="row">
     <div class="col-lg-6">
       <!-- Ranking table -->
@@ -79,7 +82,10 @@
     <div class="col-lg-6">
       <h4>
         <i class="fas fa-table-tennis mr-2"></i>Last {{games.data.length}} Games
-        <button type="button" class="btn btn-primary btn-sm float-right" (click)="addGame()">
+        <button type="button"
+                class="btn btn-primary btn-sm float-right"
+                (click)="addGame()"
+                [disabled]="currentSeason.id != season.id">
           <i class="fas fa-plus mr-2"></i>Add Game
         </button>
       </h4>

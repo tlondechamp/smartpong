@@ -13,6 +13,9 @@ export class SeasonListComponent implements OnInit {
   constructor(private seasonService: SeasonService) {}
 
   ngOnInit() {
-    this.seasonService.list().subscribe(seasons => this.seasons = seasons);
+    this.seasonService.list({
+      'start_date__lte': '',
+      'end_date__gte': '',
+    }).subscribe(seasons => this.seasons = seasons);
   }
 }
