@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 
-import { BehaviorSubject, interval, of, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, of, Subject, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { DATE_FORMAT, NB_LAST_GAMES, REFRESH_DELTA } from '../constants';
@@ -25,6 +25,8 @@ import { SeasonService } from './season.service';
 export class SeasonComponent implements OnInit {
   season: Season;
   currentSeason: Season;
+  counter: number;
+  interval;
 
   private _season$: Subscription;
 
@@ -46,10 +48,11 @@ export class SeasonComponent implements OnInit {
     this.games = new GameSource();
     this.getCurrentSeason();
     this.refreshData();
-    interval(REFRESH_DELTA).subscribe(n => this.refreshData());
+    this.startCountdown(REFRESH_DELTA);
   }
 
   ngOnDestroy() {
+    clearInterval(this.interval);
     this._season$.unsubscribe();
   }
 
@@ -70,6 +73,20 @@ export class SeasonComponent implements OnInit {
                         )
     );
   }
+
+  startCountdown(seconds: number){
+    this.counter = seconds;
+
+    this.interval = setInterval(() => {
+      this.counter--;
+
+      if (this.counter < 0) {
+        clearInterval(this.interval);
+        this.refreshData();
+        this.startCountdown(seconds);
+      };
+    }, 1000);
+  };
 
   addGame() {
     const addModal = this._modalService.show(GameAddComponent, {class: 'modal-lg'});

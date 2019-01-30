@@ -14,7 +14,12 @@
   <div class="row">
     <div class="col-lg-6">
       <!-- Ranking table -->
-      <h4><i class="fas fa-list-ol mr-2"></i>Ranking</h4>
+      <h4>
+        <i class="fas fa-list-ol mr-2"></i>Ranking
+        <span class="float-right text-monospace">
+          {{ counter }}<i class="fas fa-circle-notch fa-spin ml-2" style="color: green"></i>
+        </span>
+      </h4>
       <div *ngIf="season?.ranking.ranking.length == 0" class="mb-3">
         <h5 class="col-lg mt-3">
           There are no ranked players for this season.
