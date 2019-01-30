@@ -24,7 +24,6 @@ import { SeasonService } from './season.service';
 })
 export class SeasonComponent implements OnInit {
   season: Season;
-  currentSeason: Season;
   counter: number;
   interval;
 
@@ -46,9 +45,7 @@ export class SeasonComponent implements OnInit {
 
   ngOnInit() {
     this.games = new GameSource();
-    this.getCurrentSeason();
     this.refreshData();
-    this.startCountdown(REFRESH_DELTA);
   }
 
   ngOnDestroy() {
@@ -63,7 +60,9 @@ export class SeasonComponent implements OnInit {
                           season => {
                             this.season = season;
                             this.getSeasonGames();
-                            this.getCurrentSeason();
+                            if (!this.isCompleted()) {
+                              this.startCountdown(REFRESH_DELTA);
+                            }
                           },
                           error => {
                             if (error.status === 404) {
@@ -76,14 +75,11 @@ export class SeasonComponent implements OnInit {
 
   startCountdown(seconds: number){
     this.counter = seconds;
-
     this.interval = setInterval(() => {
       this.counter--;
-
       if (this.counter < 0) {
         clearInterval(this.interval);
         this.refreshData();
-        this.startCountdown(seconds);
       };
     }, 1000);
   };
@@ -96,9 +92,11 @@ export class SeasonComponent implements OnInit {
               (new_game) => {
                 this.games.add(new_game);
                 this.refreshData();
-                this.toastr.success('Your game has been registered !', 'Success');
+                setTimeout(() => this.toastr.success('Your game has been registered !', 'Success'));
               },
-              () => this.toastr.error('Error while registering your game !', 'Failed')
+              () => {
+                setTimeout(() => this.toastr.error('Error while registering your game !', 'Failed'));
+              }
             );
   }
 
@@ -110,15 +108,6 @@ export class SeasonComponent implements OnInit {
     }).subscribe(games => {
      this.games.data = games.slice(0, NB_LAST_GAMES);
    });
-  }
-
-  getCurrentSeason() {
-    this._seasonService.list({
-      'start_date__lte': this.getDateToStr(new Date()),
-      'end_date__gte': this.getDateToStr(new Date()),
-    }).subscribe(seasons => {
-      this.currentSeason = seasons[0];
-    });
   }
 
   getDateToStr(date: Date) {

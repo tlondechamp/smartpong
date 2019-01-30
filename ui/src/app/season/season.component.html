@@ -1,4 +1,4 @@
-<div *ngIf="season && currentSeason" class="jumbotron jumbotron-fluid">
+<div *ngIf="season" class="jumbotron jumbotron-fluid">
   <div class="container">
     <h1>
       <i class="fas fa-globe-americas mr-2"></i>{{ season?.name }}
@@ -10,13 +10,13 @@
     </p>
   </div>
 </div>
-<div *ngIf="season && currentSeason" class="container-fluid">
+<div *ngIf="season" class="container-fluid">
   <div class="row">
     <div class="col-lg-6">
       <!-- Ranking table -->
       <h4>
         <i class="fas fa-list-ol mr-2"></i>Ranking
-        <span class="float-right text-monospace">
+        <span *ngIf="!isCompleted()" class="float-right text-monospace">
           {{ counter }}<i class="fas fa-circle-notch fa-spin ml-2" style="color: green"></i>
         </span>
       </h4>
@@ -90,7 +90,7 @@
         <button type="button"
                 class="btn btn-primary btn-sm float-right"
                 (click)="addGame()"
-                [disabled]="currentSeason.id != season.id">
+                [disabled]="isCompleted()">
           <i class="fas fa-plus mr-2"></i>Add Game
         </button>
       </h4>
