@@ -31,7 +31,7 @@ export class SeasonComponent implements OnInit {
 
   public games: GameSource;
 
-  readonly DateFormat = DATE_FORMAT;
+  readonly dateFormat = DATE_FORMAT;
   readonly gameResultLabels = GameResultLabels;
 
   constructor(
@@ -61,8 +61,9 @@ export class SeasonComponent implements OnInit {
                             this.season = season;
                             this.getSeasonGames();
                             if (!this.isCompleted()) {
-                              this.startCountdown(REFRESH_DELTA);
+                              this.countDown(REFRESH_DELTA);
                             }
+                            this.getSeasonProgress();
                           },
                           error => {
                             if (error.status === 404) {
@@ -73,11 +74,16 @@ export class SeasonComponent implements OnInit {
     );
   }
 
-  startCountdown(seconds: number){
+  getSeasonProgressWidth() {
+    return +this.getSeasonProgress() + '%';
+  }
+
+  countDown(seconds: number){
     this.counter = seconds;
     this.interval = setInterval(() => {
       this.counter--;
       if (this.counter < 0) {
+        this.counter = 0;
         clearInterval(this.interval);
         this.refreshData();
       };
@@ -110,11 +116,12 @@ export class SeasonComponent implements OnInit {
    });
   }
 
-  getDateToStr(date: Date) {
-    const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2);
-    const day = ('0' + date.getDate()).slice(-2);
-    return year + '-' + month + '-' + day;
+  getSeasonProgress() {
+    const start = new Date(this.season.start_date).getTime();
+    const now = new Date().getTime();
+    const end = new Date(this.season.end_date).getTime();
+    const progress = (Math.min(now, end) - start) / (end - start) * 100;
+    return Math.round(progress * 100) / 100;
   }
 
   isCompleted() {

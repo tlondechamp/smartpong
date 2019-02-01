@@ -4,8 +4,16 @@
       <i class="fas fa-globe-americas mr-2"></i>{{ season?.name }}
       <i *ngIf="isCompleted()" class="far fa-check-circle" style="color: green"></i>
     </h1>
+    <h4>
+      <progressbar style="background-color: white"
+                   [animate]="true"
+                   [value]="getSeasonProgress()"
+                   [max]="100"><b>{{ getSeasonProgress() }}%</b>
+      </progressbar>
+    </h4>
     <p>
-      Qualifications from <b>{{ season?.start_date | date: 'longDate' }}</b> to <b>{{ season?.end_date | date: 'longDate' }}</b>.
+      Qualifications from <b>{{ season?.start_date | date: 'longDate' }}</b> to
+      <b>{{ season?.end_date | date: 'MMMM d, y (H:mm)' }}</b>.
       Each player must play <b>{{ season?.placement_games }} games</b> before entering the ranking.
     </p>
   </div>
@@ -130,7 +138,7 @@
               </span>
             </td>
             <td class="text-right">{{ gameResultLabels[game?.result] }}</td>
-            <td class="text-right">{{ game?.date | date: DateFormat }}</td>
+            <td class="text-right text-monospace">{{ game?.date | date: dateFormat }}</td>
           </tr>
         </tbody>
       </table>

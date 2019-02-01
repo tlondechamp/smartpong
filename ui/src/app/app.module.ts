@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { ChartsModule } from 'ng2-charts';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ToastrModule } from 'ngx-toastr';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -57,6 +58,7 @@ import { KeysPipe } from './utils/keys-pipe';
     ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
     HttpClientModule,
     ModalModule.forRoot(),
+    ProgressbarModule.forRoot(),
     TabsModule.forRoot(),
     ToastrModule.forRoot({
       timeOut: TOASTER_LIFESPAN
