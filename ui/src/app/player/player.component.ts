@@ -53,16 +53,17 @@ export class PlayerComponent implements OnInit, OnDestroy {
   // Game Chart
   public gameChartOptions = {
     scales: {
-      yAxes: [{
+      xAxes: [{
          ticks: {
-            min : 0
+            beginAtZero:true,
+            stepSize: 1,
           }
       }]
     },
     responsive: true
   };
   public gameChartLabels = [];
-  public gameChartType = 'bar';
+  public gameChartType = 'horizontalBar';
   public gameChartLegend = true;
   public gameChartColors = [
     { backgroundColor: 'rgba(38,114,38,0.8)' },
@@ -76,16 +77,17 @@ export class PlayerComponent implements OnInit, OnDestroy {
   // Opponent Game Chart
   public opponentGameChartOptions = {
     scales: {
-      yAxes: [{
-         ticks: {
-            min : 0
-          }
+      xAxes: [{
+        ticks: {
+          beginAtZero:true,
+          stepSize: 1,
+        },
       }]
     },
-    responsive: true
+    responsive:true
   };
   public opponentGameChartLabels = [];
-  public opponentGameChartType = 'bar';
+  public opponentGameChartType = 'horizontalBar';
   public opponentGameChartLegend = true;
   public opponentGameChartColors = [
     { backgroundColor: 'rgba(38,114,38,0.8)' },
@@ -100,7 +102,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
   public scoreChartOptions = {
     scaleShowVerticalLines: false,
     scales: {
-      yAxes: [{
+      xAxes: [{
          ticks: {
             suggestedMin : 900
           }
@@ -109,7 +111,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     responsive: true,
   };
   public scoreChartLabels = [];
-  public scoreChartType = 'bar';
+  public scoreChartType = 'horizontalBar';
   public scoreChartLegend = true;
   public scoreChartColors = [
     { backgroundColor: 'rgba(218,16,16,0.8)' },

@@ -155,18 +155,12 @@ class SimplePlayerSerializer(serializers.ModelSerializer):
 
 
 class SeasonSerializer(serializers.ModelSerializer):
-    playoff_data = serializers.SerializerMethodField()
     ranking = serializers.SerializerMethodField()
 
     class Meta:
         model = Season
         fields = ('id', 'name', 'start_date', 'end_date',
                   'placement_games', 'playoff_data', 'ranking')
-
-    def get_playoff_data(self, season):
-        if season.playoff_data:
-            return json.loads(season.playoff_data)
-        return None
 
     def get_ranking(self, season):
         response = {

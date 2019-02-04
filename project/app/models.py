@@ -71,7 +71,7 @@ class Season(models.Model):
     start_date = models.DateTimeField(null=True)
     end_date = models.DateTimeField(null=True)
     placement_games = models.IntegerField(default=5)
-    playoff_data = models.TextField()
+    playoff_data = models.TextField(blank=True)
 
     def __str__(self):
         return self.name

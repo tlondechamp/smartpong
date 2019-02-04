@@ -4,6 +4,6 @@ export interface Season {
   start_date: string;
   end_date: string;
   placement_games: number;
-  playoff_data: object | object[];
+  playoff_data: string;
   ranking: object | object[];
 }

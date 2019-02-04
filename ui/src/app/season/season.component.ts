@@ -49,7 +49,7 @@ export class SeasonComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    clearInterval(this.interval);
+    this.stopCountdown();
     this._season$.unsubscribe();
   }
 
@@ -84,11 +84,15 @@ export class SeasonComponent implements OnInit {
       this.counter--;
       if (this.counter < 0) {
         this.counter = 0;
-        clearInterval(this.interval);
+        this.stopCountdown();
         this.refreshData();
       };
     }, 1000);
   };
+
+  stopCountdown() {
+    clearInterval(this.interval);
+  }
 
   addGame() {
     const addModal = this._modalService.show(GameAddComponent, {class: 'modal-lg'});
@@ -97,6 +101,7 @@ export class SeasonComponent implements OnInit {
             .subscribe(
               (new_game) => {
                 this.games.add(new_game);
+                this.stopCountdown();
                 this.refreshData();
                 setTimeout(() => this.toastr.success('Your game has been registered !', 'Success'));
               },

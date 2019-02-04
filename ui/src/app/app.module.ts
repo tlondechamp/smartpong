@@ -30,6 +30,7 @@ import { SeasonListComponent } from './season/list/season-list.component';
 import { SeasonService } from './season/season.service';
 
 import { KeysPipe } from './utils/keys-pipe';
+import { SafePipe } from './utils/safe-pipe';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { KeysPipe } from './utils/keys-pipe';
     PageNotFoundComponent,
     PlayerComponent,
     PlayerListComponent,
+    SafePipe,
     SeasonComponent,
     SeasonListComponent,
   ],
