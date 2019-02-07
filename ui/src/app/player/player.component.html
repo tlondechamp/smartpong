@@ -47,10 +47,10 @@
                         </td>
                         <td class="text-monospace">
                           {{ gameResultLabels[game?.result] }}
-                          <i class="fas fa-check-circle fa-lg" style="color: green"
+                          <i class="fas fa-trophy fa-lg" style="color: gold"
                              *ngIf="(this.player.id == game.player1 && [0,1,4,5,6].includes(game.result) ||
                                     this.player.id == game.player2 && [2,3,7,8,9].includes(game.result))"></i>
-                          <i class="fas fa-times-circle fa-lg" style="color: red"
+                          <i class="fas fa-heart-broken fa-lg" style="color: red"
                              *ngIf="(this.player.id == game.player1 && [2,3,7,8,9].includes(game.result) ||
                                      this.player.id == game.player2 && [0,1,4,5,6].includes(game.result))"></i>
                         </td>
