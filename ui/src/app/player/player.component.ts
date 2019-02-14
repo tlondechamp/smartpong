@@ -30,14 +30,14 @@ export class PlayerComponent implements OnInit, OnDestroy {
   readonly gameResultLabels = GameResultLabels;
 
   // Score Evolution Chart
-  public scoreEvolutionChartData:Array<any> = [
+  public scoreEvolutionChartData = [
     {data: [], label: 'Score'},
   ];
-  public scoreEvolutionChartLabels:Array<any> = [];
-  public scoreEvolutionChartOptions:any = {
+  public scoreEvolutionChartLabels = [];
+  public scoreEvolutionChartOptions = {
     responsive: true
   };
-  public scoreEvolutionChartColors:Array<any> = [
+  public scoreEvolutionChartColors = [
     {
       backgroundColor: 'rgba(63,127,191,0.2)',
       borderColor: 'rgba(63,127,191,1)',
@@ -47,8 +47,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
       pointHoverBorderColor: 'rgba(63,127,191,0.8)'
     }
   ];
-  public scoreEvolutionChartLegend:boolean = true;
-  public scoreEvolutionChartType:string = 'line';
+  public scoreEvolutionChartLegend = true;
+  public scoreEvolutionChartType = 'line';
 
   // Game Chart
   public gameChartOptions = {
@@ -142,7 +142,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
                             this.player = player;
                             this.fillLastGamesTab(this.player);
                             this.fillGlobalTab(this.player);
-                            this.fillSeasonTabs(this.player);
                           },
                           error => {
                             if (error.status === 404) {
@@ -192,36 +191,31 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-  fillSeasonTabs(player: Player, season: number = -1) {
+  fillSeasonTabs(player: Player, season_index: number) {
     // Reset Chart
     this.opponentGameChartLabels = [];
-    this.opponentGameChartData = [
-      {data: [], label: 'Wins'},
-      {data: [], label: 'Losses'},
-    ];
-    // Set Season Index
-    let season_index;
-    if (season == -1) {
-      season_index = Object.keys(player.stats['seasons']).length;
-    } else {
-      season_index = season;
-    }
-    // Set favorite and pet peeve opponent
-    let min_win_percentage = 50;
-    let max_win_percentage = 50;
+    this.opponentGameChartData[0].data = [];
+    this.opponentGameChartData[1].data = [];
+    // Reset favorite & pet peeve
+    this.favoriteOpponent = null;
+    this.petPeeveOpponent = null;
+    // Set default win percentages
+    let min_win_percentage = {};
+    let max_win_percentage = {};
+    min_win_percentage[season_index] = 50;
+    max_win_percentage[season_index] = 50;
     for (let [key, value] of Object.entries(player.stats['seasons'][season_index]['opponents'])) {
       // Opponent Game Chart
       this.opponentGameChartLabels.push(value['name']);
       this.opponentGameChartData[0].data.push(value['wins']);
       this.opponentGameChartData[1].data.push(value['losses']);
-      //
-      if (value['win_percentage'] > max_win_percentage) {
+      if (value['win_percentage'] > max_win_percentage[season_index]) {
         this.favoriteOpponent = value;
-        max_win_percentage = value['win_percentage'];
+        max_win_percentage[season_index] = value['win_percentage'];
       }
-      if (value['win_percentage'] < min_win_percentage) {
+      if (value['win_percentage'] < min_win_percentage[season_index]) {
         this.petPeeveOpponent = value;
-        min_win_percentage = value['win_percentage'];
+        min_win_percentage[season_index] = value['win_percentage'];
       }
     }
   }
