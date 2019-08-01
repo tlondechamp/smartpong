@@ -157,7 +157,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
 
   fillLastGamesTab(player: Player) {
-    const currentSeason = Object.keys(player.stats['seasons']).length;
+    const seasons = Object.keys(player.stats['seasons']);
+    const currentSeason = seasons[seasons.length - 1]
     const lastGames = Object.entries(player.stats['seasons'][currentSeason]['last_games']);
     let playerScore = player.stats['seasons'][currentSeason]['rating'];
 
@@ -210,11 +211,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
       this.opponentGameChartData[0].data.push(value['wins']);
       this.opponentGameChartData[1].data.push(value['losses']);
       if (value['win_percentage'] > max_win_percentage[season_index]) {
-        this.favoriteOpponent = value;
+        this.favoriteOpponent = value as object;
         max_win_percentage[season_index] = value['win_percentage'];
       }
       if (value['win_percentage'] < min_win_percentage[season_index]) {
-        this.petPeeveOpponent = value;
+        this.petPeeveOpponent = value as object;
         min_win_percentage[season_index] = value['win_percentage'];
       }
     }

@@ -1,4 +1,4 @@
-export const APP_VERSION = 'v1.1.7';
+export const APP_VERSION = 'v1.1.8';
 export const DATE_FORMAT = 'yyyy-MM-dd HH:mm';
 export const NB_LAST_GAMES = 20;
 export const REFRESH_DELTA = 60;
